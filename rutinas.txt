@@ -1,0 +1,108 @@
+# Rutina 1 - Eliminación de Gauss
+if np.abs(np.linalg.det(A)) < delta:
+        print('el sistema no tiene solucion o tiene infinitas soluciones')
+else:
+    n=A.shape[0]
+    j = -1
+    i = n - 1 
+    while j < n-2:
+        if i == n - 1:
+            j += 1
+            i = j
+            subcol = np.abs(C[j:, j])
+            t = np.argmax(subcol)         
+            pibot = subcol[t]
+            if delta > pibot:
+                print('el sistema no tiene solucion o tiene infinitas soluciones')
+            else:
+                aux=C[j,:].copy()
+                C[j,:]=C[t+j,:]
+                C[t+j,:]=aux.copy()
+        i += 1
+        k = C[i, j] / C[j, j]
+        C[i, j:] -= k * C[j, j:]
+X=np.zeros((n,1),dtype=float)
+X[n-1] = C[-1, -1] / C[n-1, n-1]
+for i in range(n-2, -1, -1):
+    X[i] = (C[i, -1] - C[i, i+1:n].dot(X[i+1:n])) / C[i, i]
+
+# Rutina 2 - Jacobi
+for i in range(m):
+    for j in range(n):          
+        X[j] = (B[j] - A[j, np.delete(np.arange(n), j) ].dot(P[np.delete(np.arange(n), j) ])) / A[j, j]
+    err = np.linalg.norm(X - P)
+    normX = np.linalg.norm(X)
+    relerr = err / normX
+    if tol > err or tol > relerr:
+        break
+    else:
+        P = X.copy()
+
+# Rutina 3 - Gauss-Seidel
+for i in range(m):
+    for j in range(n):          
+        X[j] = (B[j] - A[j, np.delete(np.arange(n), j) ].dot(X[np.delete(np.arange(n), j) ])) / A[j, j]
+    err = np.linalg.norm(X - P)
+    normX = np.linalg.norm(X)
+    relerr = err / normX
+    if tol > err or tol > relerr:
+        break
+    else:
+        P = X.copy()
+    print('P:\n',P)
+
+# Rutina 4 - Bisección
+for i in range(n):
+ c=(a+b)/2
+ err=np.abs(c0-c)
+ relerr=np.abs(err/c)
+ if tol>err or tol>relerr or tol>np.abs(f(c)):
+   break
+ else:
+   if f(a)*f(c)<0:
+     b=c
+   else:
+     a=c
+ c0=c
+
+# Rutina 5 - Falsa Posición
+for i in range(n):
+ c=(b*f(a)-a*f(b))/(f(a)-f(b))
+ err=np.abs(c0-c)
+ relerr=np.abs(err/c)
+ if tol>err or tol>relerr or tol>np.abs(f(c)):
+   break
+ else:
+   if f(a)*f(c)<0:
+     b=c
+   else:
+     a=c
+ c0=c
+
+# Rutina 6 - Newton-Raphson
+for i in range(n):
+ p=p0-f(p0)/df(p0)
+ err=jnp.abs(p-p0)
+ relerr=jnp.abs(err/p)
+ if tol>err or tol>relerr or tol>jnp.abs(f(p)):
+   break
+ p0=p
+
+# Rutina 7 - Punto Fijo
+for i in range(n):
+ p=g(p0)
+ err=np.abs(p-p0)
+ relerr=np.abs(err/p)
+ if tol>err or tol>relerr or tol>np.abs(f(p)):
+   break
+ p0=p
+
+# Rutina 8 - Secante
+for i in range(n):
+ x2=(x1*f(x0)-x0*f(x1))/(f(x0)-f(x1))
+ err=np.abs(x2-x1)
+ relerr=np.abs(err/x2)
+ if tol>err or tol>relerr or tol>np.abs(f(x2)):
+   break
+ x0=x1
+ x1=x2
